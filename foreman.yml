@@ -1,0 +1,29 @@
+---
+- name: Instala Foreman en RHEL8
+  hosts: foreman
+  tasks:
+    - name: Instala el repositorio de Puppet6
+      dnf:
+        name: 'https://yum.puppet.com/puppet6-release-el-8.noarch.rpm'
+        state: present
+        disable_gpg_check: yes
+    
+    - name: Instala el repositorio de Foreman
+      dnf:
+        name: 'https://yum.theforeman.org/releases/2.1/el8/x86_64/foreman-release.rpm'
+        state: present
+        disable_gpg_check: yes
+    
+    - name: Descarga el instalador de Foreman
+      dnf:
+        name: foreman-installer
+        state: present
+        disable_gpg_check: yes
+    
+    - name: Ejecuta el instalador de Foreman
+      shell: foreman-installer
+      register: foreman_install
+    
+    - name: Obtiene la contreseña del Admin por defecto
+      debug:
+        var: foreman_install.stdout_lines

@@ -1,0 +1,8 @@
+---
+# defaults file for install_docker
+local_bin_path: /usr/local/bin
+nexus_url: http://nexus.bancobasa.com.py
+nexus_repository: repository/produccion
+docker_compose: docker-compose/1.29.2/docker-compose
+ansible_awx: awx/17.0.1/awx.zip
+repo_path: /tmp

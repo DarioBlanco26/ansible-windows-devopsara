@@ -1,0 +1,13 @@
+---
+# tasks file for config_docker
+- name: Configura el archivo daemon.json del servicio Docker
+  template:
+    src: daemon.json.j2
+    dest: '{{docker_config_path}}/daemon.json'
+  register: daemon_config
+
+- name: Reinicia el servicio docker
+  service:
+    name: docker
+    state: restarted
+  when: daemon_config.changed == true

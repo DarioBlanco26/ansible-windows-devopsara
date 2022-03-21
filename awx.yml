@@ -1,0 +1,8 @@
+---
+- name: Instala y configura AWX Ansible
+  hosts: awx
+  roles:
+    - install_ansible
+    - install_docker
+    - config_docker
+    - install_awx

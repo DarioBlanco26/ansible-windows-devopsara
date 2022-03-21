@@ -1,0 +1,38 @@
+---
+- name: Instala Nexus Sonatype 
+  hosts: nexus
+  tasks:
+    - name: Detiene y elimina el contenedor nexus3 si existe
+      docker_container:
+        name: nexus3
+        state: absent
+
+    - name: Remueve la imagen sonatype/nexus3 si existe
+      docker_image:
+        name: sonatype/nexus3
+        state: absent
+        force_absent: yes
+
+    - name: Despliega el contenedor Nexus
+      docker_container:
+        name: nexus3
+        image: sonatype/nexus3
+        state: started
+        restart: yes
+        published_ports:
+          - "8081:8081"
+   
+    - name: Espera 30 segundos
+      wait_for:
+        port: 8081
+        delay: 30
+
+    - name: Obtenga el password del usuario 'admin' en el Nexus
+      shell: docker exec nexus3 cat /nexus-data/admin.password
+      register: nexus_admin_pass
+      tags: admin_pass
+
+    - name: Muestra el password del usuario 'admin' en el Nexus
+      debug:
+        var: nexus_admin_pass.stdout
+      tags: admin_pass

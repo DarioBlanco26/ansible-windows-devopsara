@@ -1,0 +1,6 @@
+---
+# defaults file for config_docker
+nexus_registry: nexus.bancobasa.com.py
+nexus_registry_port: 9002
+metrics_port: 9323
+docker_config_path: /etc/docker

@@ -1,0 +1,57 @@
+---
+# tasks file for install_docker
+- name: Instala paquetes requeridos para Ansible AWX
+  package:
+    name:
+      - make
+      - git
+      - python36
+      - unzip
+    state: present
+
+- name: Instala modulos de python requeridos para Ansible AWX
+  pip:
+    name:
+      - docker
+      - docker-compose
+
+- name: Verifica si /usr/local/bin/docker-compose existe
+  stat:
+    path: '{{local_bin_path}}/docker-compose'
+  register: docker_compose_bin
+
+- name: Descarga el docker-compose del Nexus
+  get_url:
+    url: '{{nexus_url}}/{{nexus_repository}}/{{docker_compose}}'
+    dest: '{{local_bin_path}}/'
+  when: docker_compose_bin.stat.exists == false
+
+- name: Asigna permisos de ejecucion al binario /usr/local/bin/docker-compose 
+  file:
+    path: '{{local_bin_path}}/docker-compose'
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Chequea si existe el contenedor awx_task
+  shell: "docker ps | grep -i awx_task"
+  register: awx_install
+  ignore_errors: true
+
+- name: Descarga y descomprima el proyecto Ansible AWX 17.0.1 del Nexus
+  unarchive:
+    src: '{{nexus_url}}/{{nexus_repository}}/{{ansible_awx}}'
+    dest: '{{repo_path}}/'
+    remote_src: yes
+  when: awx_install.rc == 1
+
+- name: Configura el archivo de inventario para instalación del AWX
+  template:
+    src: inventory.j2
+    dest: '{{repo_path}}/awx/installer/inventory'
+  when: awx_install.rc == 1
+
+- debug:
+    msg: Ejecuta el playbook en el servidor {{ansible_host}} 'ansible-playbook install.yml -i inventory' desde el directorio '/tmp/awx/installer/' como usuario 'root' para terminar la instalación
+  when: awx_install.rc == 1
+

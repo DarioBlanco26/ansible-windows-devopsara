@@ -1,0 +1,36 @@
+---
+# tasks file for install_docker
+- name: Chequea el paquete docker-ce en el sistema
+  shell: "rpm -qa | grep -i docker-ce"
+  register: docker_install
+  changed_when:
+    - docker_install.rc == 1
+    - docker_install.stderr == ''
+  failed_when:
+    - docker_install.rc == 1
+    - docker_install.stderr != ''
+  ignore_errors: yes
+
+- name: Instala paquetes requeridos para docker-ce
+  package:
+    name: yum-utils
+    state: present
+
+- name: Configura el repositorio docker-ce.repo
+  shell: 'yum-config-manager --add-repo {{url_repo}}'
+  when: docker_install.rc == 1
+
+- name: Instala docker-ce
+  package:
+    name:
+      - docker-ce
+      - docker-ce-cli
+      - containerd.io
+    state: present
+
+- name: Levanta y habilita por defecto el servicio dockerd
+  service:
+    name: docker
+    state: started
+    enabled: yes
+

@@ -1,0 +1,16 @@
+[awx]
+10.22.28.4
+
+[foreman]
+10.22.28.12
+
+[nexus]
+10.22.28.4
+
+[domain-controler]
+
+[domain-controler:vars]
+ansible_user=Administrador
+ansible_password={{local_admin_pass}}
+ansible_connection=winrm
+ansible_winrm_server_cert_validation=ignore

@@ -1,0 +1,17 @@
+---
+- name: Habilita el repositorio ansible-2.9-for-rhel-8-x86_64-rpms
+  shell: 'subscription-manager repos --enable {{rhn_ansible_repo}}'
+  ignore_errors: yes
+
+- name: Instala el paquete Ansible
+  package:
+    name:
+      - python36
+      - ansible
+
+- name: Instala modulos de python requeridos para conexion WinRM y Vcenter
+  pip:
+    name:
+      - pyvmomi
+      - pywinrm
+
