@@ -11,7 +11,7 @@ lab01.arahant.com.py
 lab03.arahant.com.py
 
 [domaincontroller:vars]
-ansible_user=Administrador
+ansible_user=Administrador@arahant.com.py
 ansible_password=Temporal01*
 ansible_connection=winrm
 ansible_winrm_transport=kerberos
@@ -21,7 +21,7 @@ ansible_winrm_server_cert_validation=ignore
 lab04.arahant.com.py
 
 [win10:vars]
-ansible_user=ansiblewin
+ansible_user=ansiblewin@aharant.com.py
 ansible_password=Temporal01*
 ansible_connection=winrm
 ansible_winrm_transport=kerberos
