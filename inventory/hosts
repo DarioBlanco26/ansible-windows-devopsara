@@ -1,16 +1,19 @@
 [awx]
-10.22.28.4
+lab01.arahant.com.py
 
 [foreman]
-10.22.28.12
+lab02.arahant.com.py
 
 [nexus]
-10.22.28.4
+lab01.arahant.com.py
 
-[domain-controler]
+[domaincontroller]
+lab04.arahant.com.py
+lab03.arahant.com.py
 
-[domain-controler:vars]
+[domaincontroller:vars]
 ansible_user=Administrador
-ansible_password={{local_admin_pass}}
+ansible_password=Temporal01*
 ansible_connection=winrm
 ansible_winrm_server_cert_validation=ignore
+

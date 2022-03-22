@@ -1,18 +1,23 @@
 
 ---
 - name: Crea dominio AD
-  hosts: domain-controler
+  hosts: domaincontroller
   tasks:
     - name: Crea el dominio 'arahant.com.py'
       win_domain:
         dns_domain_name: arahant.com.py
         domain_netbios_name: ARAHANT
-        safe_mode_password: abc1234
-
+        safe_mode_password: Temporal01*
+      register: domain_install
+    
+    - name: Reinicia el servidor si es necesario
+      win_reboot:
+      when: domain_install.reboot_required == true
+      
     - name: Crea un usuario Domain Admins
       win_domain_user:
-        name: devopsara
-        upn: devopsara@arahant.com.py
-        password: 1234abc
+        name: ansiblewin
+        upn: ansiblewin@arahant.com.py
+        password: Temporal01*
         groups: 
-          - Domain Admins
+          - 'Admins. del dominio'

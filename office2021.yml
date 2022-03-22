@@ -1,0 +1,26 @@
+---
+- name: Instala Microsoft Office 2021
+  hosts: win10
+  tasks:
+    - name: Crea carpeta C:\Libreria
+      win_file:
+        path: C:\Libreria
+        state: directory
+    
+    - name: Descarga del Nexus el instalador de Office
+      win_get_url:
+        url: http://lab01.arahant.com.py:8081/repository/devopsara/microsoft/office/2021/office2021.zip
+        dest: C:\Libreria\
+
+    - name: Descomprime el archivo office2021.zip
+      win_unzip:
+        src: C:\Libreria\office2021.zip
+        dest: C:\Libreria\
+
+    - name: Copia el archivo Configuration_demo.xml en C:\Libreria\office2021
+      win_copy:
+        src: Configuration_demo.xml
+        dest: C:\Libreria\office2021\ 
+
+    - name: Instala Microsoft Word de la Suite de Office 2021
+      win_command: C:\Libreria\office2021\setup.exe /configure C:\Libreria\office2021\Configuration_demo.xml

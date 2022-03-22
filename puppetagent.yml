@@ -1,0 +1,25 @@
+---
+- name: Instala Puppet Agent
+  hosts: win10,domaincontroller
+  tasks:
+    - name: Crea carpeta C:\Libreria
+      win_file:
+        path: C:\Libreria
+        state: directory
+    
+    - name: Descarga del Nexus el instalador 'puppet-agent-6.26.0-x64.msi'
+      win_get_url:
+        url: http://lab01.arahant.com.py:8081/repository/devopsara/puppet/6.26.0/puppet-agent-6.26.0-x64.msi
+        dest: C:\Libreria\
+
+    - name: Instala el 'puppet-agent-6.26.0-x64.msi'
+      win_package:
+        path: C:\Libreria\puppet-agent-6.26.0-x64.msi
+        state: present
+        arguments: PUPPET_MASTER_SERVER=lab02.arahant.com.py PUPPET_CA_SERVER=lab02.arahant.com.py PUPPET_AGENT_CERTNAME={{ansible_fqdn | lower}} PUPPET_AGENT_ENVIRONMENT=production
+  
+    - name: Levanta el servicio 'puppet-agent'
+      win_service:
+        name: puppet
+        state: started
+        
