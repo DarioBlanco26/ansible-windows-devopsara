@@ -1,0 +1,28 @@
+## {{ ansible_managed }}
+
+# Configuration snippets may be placed in this directory as well
+#includedir /etc/krb5.conf.d/
+
+[logging]
+ default = FILE:/var/log/krb5libs.log
+ kdc = FILE:/var/log/krb5kdc.log
+ admin_server = FILE:/var/log/kadmind.log
+
+[libdefaults]
+ dns_lookup_realm = true
+ dns_lookup_realm = true
+ ticket_lifetime = 24h
+ renew_lifetime = 7d
+ forwardable = true
+ default_realm = ARAHANT.COM.PY
+
+[realms]
+ ARAHANT.COM.PY = {
+  kdc = lab03.arahant.com.py
+  admin_server = lab03.arahant.com.py
+ }
+
+[domain_realm]
+ .arahant.com.py = ARAHANT.COM.PY
+ arahant.com.py = ARAHANT.COM.PY
+

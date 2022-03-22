@@ -1,0 +1,11 @@
+---
+- name: Unir servidor Linux a dominio AD
+  hosts: awx,foreman
+  vars_prompt:
+    - name: username
+      prompt: "Username"
+      private: no
+    - name: password
+      prompt: "Password"
+  roles:
+    - configure_sssd

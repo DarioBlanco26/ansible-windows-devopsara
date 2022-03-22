@@ -1,0 +1,6 @@
+---
+# handlers file for configure_so
+- name: restart_sssd
+  service:
+    name: sssd
+    state: restarted

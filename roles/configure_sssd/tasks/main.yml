@@ -1,0 +1,65 @@
+---
+# tasks file for configure_ad_linux
+- name: instalar dependencias
+  dnf:
+   name: '{{ packages }}'
+   state: present
+  vars:
+    packages:
+      - adcli
+      - sssd
+      - authconfig
+      - oddjob-mkhomedir
+      - krb5-workstation
+      - krb5-libs
+
+- name: eliminar cache
+  shell: 'rm -rf /tmp/krb*; rm -rf /var/lib/sss/db/*; mv /etc/krb5.keytab /etc/krb5.keytab-clone'
+  ignore_errors: yes
+
+- name: copiar el archivo krb5.conf
+  template:
+    src: krb5.conf.j2
+    dest: /etc/krb5.conf
+  
+- name: copiar el archivo sssd.conf
+  template:
+    src: sssd.conf.j2
+    dest: /etc/sssd/sssd.conf
+    mode: 0600
+  notify: restart_sssd
+
+- name: verificar si /tmp/krb5cc_0 exists
+  stat: 
+    path: /tmp/krb5cc_0
+  register: file_krb5cc_0
+
+- name: copiar permisos de visudo
+  template:
+    src: sudo_infraestructura.j2
+    dest: /etc/sudoers.d/sudo_infraestructura 
+
+- name: Identificarse con kinit
+  shell: "echo '{{ password }}' | kinit {{ username }}"
+  #no_log: true
+  when: file_krb5cc_0.stat.exists == False
+  
+- name: Agregar al dominio
+  shell: 'adcli join arahant.com.py --login-ccache=$KRB5CCNAME --login-user={{ username }}'
+  when: file_krb5cc_0.stat.exists == False
+
+- name: Configuracion de home
+  shell: 'authconfig --enablesssd --enablesssdauth --enablemkhomedir --enablelocauthorize --update'
+  when: file_krb5cc_0.stat.exists == False
+
+- name: iniciar sssd
+  service:
+    name: sssd
+    state: started
+  when: file_krb5cc_0.stat.exists == False
+
+- name: reiniciar sssd
+  service:
+    name: sssd
+    state: restarted
+    

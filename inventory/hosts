@@ -17,3 +17,6 @@ ansible_password=Temporal01*
 ansible_connection=winrm
 ansible_winrm_server_cert_validation=ignore
 
+[win10]
+
+[win10:vars]

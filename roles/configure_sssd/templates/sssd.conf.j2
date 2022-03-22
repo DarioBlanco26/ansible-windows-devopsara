@@ -1,0 +1,19 @@
+## {{ ansible_managed }}
+[sssd]
+services = nss, pam, ssh, autofs
+config_file_version = 2
+domains = ARAHANT.COM.PY
+
+[domain/ARAHANT.COM.PY]
+id_provider = ad
+fallback_homedir = /home/%d/%u
+default_shell = /bin/bash
+debug_level = 0
+# Uncomment and configure below , if service discovery is not working
+# ad_server = server.win.example.com
+access_provider = simple
+simple_allow_users = Administrador, ansiblewin
+[nss]
+override_shell=/bin/bash
+[pam]
+
