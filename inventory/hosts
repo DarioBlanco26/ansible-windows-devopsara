@@ -8,16 +8,21 @@ lab02.arahant.com.py
 lab01.arahant.com.py
 
 [domaincontroller]
-lab04.arahant.com.py
 lab03.arahant.com.py
 
 [domaincontroller:vars]
-ansible_user=Administrador@ARAHANT.COM.PY
+ansible_user=Administrador
 ansible_password=Temporal01*
 ansible_connection=winrm
 ansible_winrm_transport=kerberos
 ansible_winrm_server_cert_validation=ignore
 
 [win10]
+lab04.arahant.com.py
 
 [win10:vars]
+ansible_user=ansiblewin
+ansible_password=Temporal01*
+ansible_connection=winrm
+ansible_winrm_transport=kerberos
+ansible_winrm_server_cert_validation=ignore

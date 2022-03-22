@@ -1,0 +1,6 @@
+---
+- name: Test ping
+  hosts: win10,domaincontroller
+  tasks:
+    - name: Ping '{{ansible_hostname}}'
+      win_ping:

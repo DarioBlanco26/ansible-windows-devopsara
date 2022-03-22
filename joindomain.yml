@@ -5,7 +5,7 @@
     - name: Configura el cliente DNS en el SO
       win_dns_client:
         adapter_name: '*'
-        ipv4_addresses: 192.168.0.8
+        ipv4_addresses: 10.22.28.32
 
     - name: Une el equipo al dominio AD
       win_domain_membership:
